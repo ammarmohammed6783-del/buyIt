@@ -1,0 +1,153 @@
+server/
+├── src/
+│   ├── config/
+│   │   ├── env.js                ✅
+│   │   └── db.js                 ✅
+│   ├── models/
+│   │   ├── User.js               (2)
+│   │   ├── Product.js            (2)
+│   │   ├── Cart.js               (6)
+│   │   └── Order.js              (7)
+│   ├── schemas/                  zod validation, one file per resource
+│   │   ├── auth.schema.js        (3)
+│   │   ├── product.schema.js     (5)
+│   │   ├── cart.schema.js        (6)
+│   │   └── order.schema.js       (7)
+│   ├── middleware/
+│   │   ├── error.js              ✅
+│   │   ├── auth.js               (3)  protect + restrictTo('admin')
+│   │   └── validate.js           (3)  runs a zod schema on the request
+│   ├── controllers/
+│   │   ├── auth.controller.js    (3)
+│   │   ├── product.controller.js (5)
+│   │   ├── cart.controller.js    (6)
+│   │   ├── order.controller.js   (7)
+│   │   ├── payment.controller.js (7)  Stripe webhook
+│   │   └── admin.controller.js   (8)  dashboard stats + users list
+│   ├── routes/
+│   │   ├── index.js              (3)  mounts every router under /api
+│   │   ├── auth.routes.js        (3)
+│   │   ├── product.routes.js     (5)
+│   │   ├── cart.routes.js        (6)
+│   │   ├── order.routes.js       (7)
+│   │   ├── payment.routes.js     (7)
+│   │   └── admin.routes.js       (8)
+│   ├── utils/
+│   │   └── tokens.js             (3)  sign/verify JWT, set cookies
+│   ├── scripts/
+│   │   └── seed.js               (5)  fills the DB with demo products + an admin
+│   ├── app.js                    ✅
+│   └── server.js                 ✅
+├── tests/                        (9)
+│   ├── auth.test.js
+│   └── product.test.js
+├── .env                          ✅ (never committed)
+├── .env.example                  ✅
+└── package.json                  ✅
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+client/
+├── src/
+│   ├── app/
+│   │   ├── layout.jsx                    (4)  navbar + providers
+│   │   ├── page.jsx                      (4)  home
+│   │   ├── globals.css                   (4)
+│   │   ├── not-found.jsx                 (4)
+│   │   ├── error.jsx                     (4)
+│   │   ├── login/page.jsx                (3)
+│   │   ├── register/page.jsx             (3)
+│   │   ├── products/
+│   │   │   ├── page.jsx                  (5)  list + search + filters
+│   │   │   └── [slug]/page.jsx           (5)  detail page
+│   │   ├── cart/page.jsx                 (6)
+│   │   ├── checkout/
+│   │   │   ├── page.jsx                  (7)
+│   │   │   └── success/page.jsx          (7)
+│   │   ├── orders/
+│   │   │   ├── page.jsx                  (7)  my orders
+│   │   │   └── [id]/page.jsx             (7)
+│   │   └── profile/page.jsx              (7)
+│   ├── components/
+│   │   ├── Navbar.jsx                    (4)
+│   │   ├── Footer.jsx                    (4)
+│   │   ├── ProtectedRoute.jsx            (3)
+│   │   ├── ProductCard.jsx               (5)
+│   │   ├── ProductFilters.jsx            (5)
+│   │   ├── CartItem.jsx                  (6)
+│   │   └── ui/                           small reusable pieces
+│   │       ├── Button.jsx                (4)
+│   │       ├── Input.jsx                 (3)
+│   │       └── Spinner.jsx               (4)
+│   ├── context/
+│   │   ├── AuthContext.jsx               (3)
+│   │   └── CartContext.jsx               (6)
+│   └── lib/
+│       ├── api.js                        (3)  fetch wrapper with credentials
+│       └── utils.js                      (5)  formatPrice, etc.
+├── .env.local                            NEXT_PUBLIC_API_URL=http://localhost:5000/api
+└── package.json
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+admin/
+├── src/
+│   ├── pages/
+│   │   ├── Login.jsx                     (8)
+│   │   ├── Dashboard.jsx                 (8)  stats cards
+│   │   ├── Products.jsx                  (8)  table + delete
+│   │   ├── ProductForm.jsx               (8)  create AND edit
+│   │   ├── Orders.jsx                    (8)  table + status filter
+│   │   ├── OrderDetails.jsx              (8)  update order status
+│   │   └── Users.jsx                     (8)
+│   ├── components/
+│   │   ├── Layout.jsx                    (8)  sidebar + header
+│   │   ├── ProtectedRoute.jsx            (8)  admin-only
+│   │   └── DataTable.jsx                 (8)  reused by every list page
+│   ├── context/
+│   │   └── AuthContext.jsx               (8)
+│   ├── lib/
+│   │   └── api.js                        (8)
+│   ├── App.jsx                           (8)  all routes
+│   ├── main.jsx
+│   └── index.css
+├── index.html
+├── .env                                  VITE_API_URL=http://localhost:5000/api
+├── .env.example
+└── package.json
+
+
+
+
+
+
+
+
+
+how to design a profissional structure myself?
+

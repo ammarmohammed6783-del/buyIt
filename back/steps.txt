@@ -1,0 +1,5 @@
+npm init -y
+npm install express
+npm install -D nodemon
+modifiy package.json
+npm run dev
