@@ -3,3 +3,12 @@ npm install express
 npm install -D nodemon
 modifiy package.json
 npm run dev
+
+
+db credintials
+username: ammarmohammed6783_db_user
+pass: 8GBafPL2oTGm7IvK
+
+
+uri: mongodb+srv://ammarmohammed6783_db_user:<db_password>@cluster0.cxyuxuz.mongodb.net/
+uri: mongodb+srv://ammarmohammed6783_db_user:<8GBafPL2oTGm7IvK>@cluster0.cxyuxuz.mongodb.net/
