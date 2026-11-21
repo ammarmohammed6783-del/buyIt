@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
+const errorMiddleware = require("./middleware/errorMiddleware")
+
 const app = express();
 
 // Middlewares
@@ -10,10 +12,8 @@ app.use(cookieParser());
 app.use(express.json());
 
 // Routes
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Server is running!",
-  });
-});
+app.use("/auth", authRouter)
+
+app.use(errorMiddleware)
 
 module.exports = app;
