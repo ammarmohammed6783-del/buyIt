@@ -145,6 +145,79 @@ exports.getMe = async (req, res, next) => {
   }
 };
 
+// PATCH /api/auth/me (Update user profile)
+exports.updateProfile = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { name, email } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    if (name) user.name = name;
+    if (email && email !== user.email) {
+      const existing = await User.findOne({ email });
+      if (existing) {
+        return res.status(409).json({ msg: "Email is already in use by another account" });
+      }
+      user.email = email;
+    }
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      msg: "Profile updated successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// PATCH /api/auth/update-password
+exports.updatePassword = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ msg: "Please provide current and new password" });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({ msg: "New password must be at least 8 characters" });
+    }
+
+    const user = await User.findById(userId).select("+passwordHash");
+    if (!user) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+
+    const isMatch = await user.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({ msg: "Current password is incorrect" });
+    }
+
+    await user.setPassword(newPassword);
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      msg: "Password updated successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.refresh = async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;

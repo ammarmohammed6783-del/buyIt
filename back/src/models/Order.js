@@ -1,7 +1,6 @@
-import mongoose from 'mongoose';
-import { SIZES } from './Product.js';
+const mongoose = require('mongoose');
+const { SIZES } = require('./Product');
 
-// Reusable "integer piasters" field so the rule is written once
 const money = {
   type: Number,
   required: true,
@@ -9,16 +8,14 @@ const money = {
   validate: { validator: Number.isInteger, message: '{PATH} must be an integer (piasters)' },
 };
 
-// A SNAPSHOT of what the customer bought, copied at purchase time.
-// If the product is renamed or repriced later, this order must not change.
 const orderItemSchema = new mongoose.Schema(
   {
-    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true }, // link back
+    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
     name: { type: String, required: true },
     image: { type: String },
     size: { type: String, enum: SIZES, required: true },
     quantity: { type: Number, required: true, min: 1, validate: Number.isInteger },
-    price: money, // price per unit AT THE TIME of purchase
+    price: money,
   },
   { _id: false }
 );
@@ -49,16 +46,14 @@ const orderSchema = new mongoose.Schema(
       enum: ['pending', 'paid', 'failed', 'refunded'],
       default: 'pending',
     },
-    paymentRef: { type: String }, // the payment provider's id: the webhook finds the order with it
+    paymentRef: { type: String },
 
-    // The fulfilment journey, updated by the admin
     status: {
       type: String,
       enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
       default: 'pending',
     },
 
-    // All calculated on the SERVER, never accepted from the client
     itemsTotal: money,
     shippingFee: money,
     totalPrice: money,
@@ -69,8 +64,8 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-orderSchema.index({ user: 1, createdAt: -1 });        // "my orders", newest first
-orderSchema.index({ status: 1, createdAt: -1 });      // admin list filtered by status
-orderSchema.index({ paymentRef: 1 }, { sparse: true }); // webhook lookup (only orders that have one)
+orderSchema.index({ user: 1, createdAt: -1 });
+orderSchema.index({ status: 1, createdAt: -1 });
+orderSchema.index({ paymentRef: 1 }, { sparse: true });
 
-export default mongoose.model('Order', orderSchema);
+module.exports = mongoose.model('Order', orderSchema);
